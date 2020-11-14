@@ -175,9 +175,21 @@ def memebot(delay = random.randint(1800, 5000)):
 
 
 while True:
-    ran = random.randint(1,30)
-    sauce = src(ran)
-    memebot()
+    try:
+        try:
+            ran = random.randint(1,30)
+            sauce = src(ran)
+            memebot()
+        except Exception:
+            ran = random.randint(1,30)
+            sauce = src(ran)
+            memebot(0)
+    except:
+        continue
+
+
+
+
 
 
 
