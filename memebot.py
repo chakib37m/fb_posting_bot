@@ -17,6 +17,10 @@ def src(source):
     #CHOOSE SOURCE
     if source == 20:
         src = 'https://www.reddit.com/r/aww/rising/'
+    elif source == 26:
+        src = 'https://www.reddit.com/r/MapPorn/rising'
+    elif source == 25:
+        src = 'https://www.reddit.com/r/Algeria/new'
     elif source == 24:
         src = 'https://www.reddit.com/r/c137/rising'
     elif source == 23:
@@ -25,7 +29,7 @@ def src(source):
         src = 'https://www.reddit.com/foodporn/rising'
     elif source == 21:
         src = 'https://www.reddit.com/r/oldpeoplefacebook/new/'
-    if source == 12:
+    elif source == 12:
         src = 'https://www.reddit.com/r/iamverybadass/rising/'
     elif source == 18:
         src = 'https://www.reddit.com/r/okbuddylinux/rising'
@@ -71,9 +75,9 @@ def get_meme(src):
         title = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[3]/div[1]/div/h1').text
         meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[4]/a/img')
         meme.click()
-        time.sleep(4)
+        time.sleep(10)
         driver.switch_to_window(driver.window_handles[1])
-        time.sleep(4)
+        time.sleep(10)
         meme = driver.find_element_by_xpath('./html/body/img')
         meme.screenshot('memes.png')
         return title
@@ -135,7 +139,7 @@ def post_pic(title):
     time.sleep(2)
 
     memes = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
-    memes.send_keys('/home/chakib37/bot/py/memes.png')
+    memes.send_keys('/home/chakib37/fb_posting_bot/memes.png')
 
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]')
     post.click()
@@ -171,6 +175,9 @@ def memebot(delay = random.randint(1800, 5000)):
 
 
 while True:
-    ran = random.randint(1,24)
+    ran = random.randint(1,30)
     sauce = src(ran)
     memebot()
+
+
+
