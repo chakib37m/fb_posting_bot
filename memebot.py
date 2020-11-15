@@ -6,7 +6,6 @@ options.headless = True
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 PATH = "/home/chakib37/bot/chromedriver"
-driver = webdriver.Chrome(PATH, chrome_options=options)
 email = 'email_here'
 password = 'password_here'
 
@@ -66,7 +65,7 @@ def wait(delay):
             print(str((delay-i)/60) + ' minutes left to post')
         time.sleep(1)
 
-def get_meme(src):
+def get_meme(src, driver):
     #STEAL MEMES
     try :
         driver.get(src)
@@ -97,7 +96,7 @@ def get_meme(src):
         except Exception:
             title = 'none'
 
-def login_cookies():
+def login_cookies(driver):
     driver.get('https://www.facebook.com')
     #LOGIN BY COOKIES
     cookies = pickle.load(open("cookies.pkl","rb"))
@@ -105,7 +104,7 @@ def login_cookies():
         driver.add_cookie(cookie)
     time.sleep(3)
 
-def login_type():
+def login_type(driver):
     #LOGIN
     driver.get('https://facebook.com')
     email = driver.find_element_by_xpath('.//*[@id="email"]')
@@ -118,7 +117,7 @@ def login_type():
     #save_cookies
     pickle.dump(driver.get_cookies(), open('cookies.pkl', 'rb'))
 
-def posttxt(txt):
+def posttxt(txt, driver):
     #POST TEXT
     driver.get('https://facebook.com')
     time.sleep(2)
@@ -133,7 +132,7 @@ def posttxt(txt):
     btn = driver.find_element_by_xpath('./html/body/div[1]/div/div[1]/div/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[3]/div[2]/div')
     btn.click()
 
-def post_pic(title):
+def post_pic(title, driver):
     #UPLOAD
     driver.get("https://mbasic.facebook.com/")
     memes = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/div[2]/span/div[1]/table/tbody/tr/td[2]/input')
@@ -157,21 +156,21 @@ def post_pic(title):
     #UPLOAD DONE
 
 def memebot(delay = random.randint(1800, 5000)):
-    driver = webdriver.Chrome(PATH, chrome_options=options)
     wait(delay)
-    caption = get_meme(sauce)
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    caption = get_meme(sauce, driver)
     time.sleep(2)
     if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
         print('none')
         driver.quit()
         memebot(0)
     elif caption.find('     \n') != -1:
-        login_cookies()
-        posttxt(caption)
+        login_cookies(driver)
+        posttxt(caption, driver)
         driver.quit()
     else:
-        login_cookies()
-        post_pic(caption)
+        login_cookies(driver)
+        post_pic(caption, driver)
         driver.quit()
 
 
