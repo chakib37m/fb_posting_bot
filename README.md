@@ -1,5 +1,9 @@
 # fb_posting_bot
 
+YOU'LL NEED TO DOWNLOAD CHROME DRIVER BECAUSE IT USES SELENIUM
+https://chromedriver.chromium.org/downloads
+
+
 This is my first python project since I wanted to learn by making stuff so that i Don't get caught up in basic.
 
 basically all this project does is take posts/memes from reddit and post them to facebook.
