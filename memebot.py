@@ -73,7 +73,7 @@ def get_meme(src):
         time.sleep(1)
         meme = driver.find_element_by_xpath('.//*[contains(@id,"t3_")]')
         meme.click()
-        time.sleep(5)
+        time.sleep(10)
         title = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[3]/div[1]/div/h1').text
         meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[4]/a/img')
         meme.click()
@@ -161,9 +161,10 @@ def memebot(delay = random.randint(1800, 5000)):
     wait(delay)
     caption = get_meme(sauce)
     time.sleep(2)
-    if caption == 'none':
+    if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
         print('none')
         driver.quit()
+        memebot(0)
     elif caption.find('     \n') != -1:
         login_cookies()
         posttxt(caption)
