@@ -17,6 +17,8 @@ def src(source):
     #CHOOSE SOURCE
     if source == 20:
         src = 'https://www.reddit.com/r/aww/rising/'
+    elif source == 27:
+        src = 'https://www.reddit.com/r/im14andthisisdeep/rising'
     elif source == 26:
         src = 'https://www.reddit.com/r/MapPorn/rising'
     elif source == 25:
