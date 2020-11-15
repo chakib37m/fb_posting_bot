@@ -6,11 +6,18 @@ options.headless = True
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 PATH = "/home/chakib37/bot/chromedriver"
-email = 'email_here'
-password = 'password_here'
+newpath = input("where is your chrome driver located? press 1 if it's hard coded:    ")
+if newpath != '1':
+    PATH = newpath
+else:
+    print('hi, all good')
 
 
-
+driver = webdriver.Chrome(PATH, chrome_options=options)
+driver.close()
+driver.quit()
+acc = input('choose a username\n') + '.pkl'
+account = open(acc, 'rb')
 
 def src(source):
     #CHOOSE SOURCE
@@ -99,13 +106,19 @@ def get_meme(src, driver):
 def login_cookies(driver):
     driver.get('https://www.facebook.com')
     #LOGIN BY COOKIES
-    cookies = pickle.load(open("cookies.pkl","rb"))
-    for cookie in cookies:
-        driver.add_cookie(cookie)
-    time.sleep(3)
+    try:
+        cookies = pickle.load(account)
+        print('logged in using cookies, welcome back!')
+        for cookie in cookies:
+            driver.add_cookie(cookie)
+        time.sleep(3)
+    except Exception:
+        login_type(driver)
 
 def login_type(driver):
     #LOGIN
+    email = input('this is only needed for the first time\n what is your email?\n')
+    password = input('what is your password?\n')
     driver.get('https://facebook.com')
     email = driver.find_element_by_xpath('.//*[@id="email"]')
     passwd = driver.find_element_by_xpath('.//*[@id="pass"]')
@@ -115,7 +128,7 @@ def login_type(driver):
     login.click()
     time.sleep(6)
     #save_cookies
-    pickle.dump(driver.get_cookies(), open('cookies.pkl', 'rb'))
+    pickle.dump(driver.get_cookies(), account)
 
 def posttxt(txt, driver):
     #POST TEXT
@@ -155,7 +168,7 @@ def post_pic(title, driver):
     post.click()
     #UPLOAD DONE
 
-def memebot(delay = random.randint(1800, 5000)):
+def memebot(driver, sauce, delay = random.randint(1800, 5000)):
     wait(delay)
     driver = webdriver.Chrome(PATH, chrome_options=options)
     caption = get_meme(sauce, driver)
@@ -163,7 +176,6 @@ def memebot(delay = random.randint(1800, 5000)):
     if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
         print('none')
         driver.quit()
-        memebot(0)
     elif caption.find('     \n') != -1:
         login_cookies(driver)
         posttxt(caption, driver)
@@ -173,25 +185,66 @@ def memebot(delay = random.randint(1800, 5000)):
         post_pic(caption, driver)
         driver.quit()
 
+def memeit(driver = driver):
 
-
-
-while True:
-    try:
+    while True:
         try:
-            ran = random.randint(1,30)
-            sauce = src(ran)
-            memebot()
-        except Exception:
-            ran = random.randint(1,30)
-            sauce = src(ran)
-            memebot(0)
-    except:
-        continue
+            try:
+                ran = random.randint(1,30)
+                sauce = src(ran)
+                memebot(driver, sauce)
+            except Exception:
+                ran = random.randint(1,30)
+                sauce = src(ran)
+                memebot(driver, sauce, 0)
+        except:
+            continue
+
+def mock(source):
+    sent = ''
+    received = 'bot is in'
+    def send(driver, received):
+        if sent == received:
+            received = receive(driver, sent)
+        else:
+            driver.get(source)
+            field = driver.find_element_by_id("composerInput")
+            field.send_keys(received)
+            driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/table/tbody/tr/td[2]/input').click()
+            return sent
+
+    def receive(driver, sent):
+        driver.get(source)
+        received = driver.find_element_by_css_selector('#fua > div:nth-child(1) > div:nth-child(3) > span:nth-child(1)').text
+        return received
+
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    login_cookies(driver)
+    while True:
+        test = ''
+        received = receive(driver, sent)
+        if 'bela3' in received:
+            break
+        else :
+            for i in range(len(received)):
+                if i % 2 == 0:
+                    test += received[i].lower()
+                else :
+                    test += received[i].upper()
+            if test in received:
+                continue
+            else:
+                received = test
+        sent = send(driver, received)
+        time.sleep(2)
 
 
+choice = input('what do you want to do? press 1 for memes, anything else for mocking\n\n')
 
-
-
-
-
+if choice == '1':
+    print("stop this program if the XPATH isn't hard coded, I'll try to fix that issue soon")
+    memeit()
+else:
+    source = input('paste the messages adress in here using mbasic facebook version.\n')
+    print('use "bela3" to make the bot stop')
+    mock(source)
