@@ -17,7 +17,6 @@ driver = webdriver.Chrome(PATH, chrome_options=options)
 driver.close()
 driver.quit()
 acc = input('choose a username\n') + '.pkl'
-account = open(acc, 'rb')
 
 def src(source):
     #CHOOSE SOURCE
@@ -103,19 +102,21 @@ def get_meme(src, driver):
         except Exception:
             title = 'none'
 
-def login_cookies(driver):
+def login_cookies(driver, acc):
     driver.get('https://www.facebook.com')
     #LOGIN BY COOKIES
     try:
+        account = open(acc, 'rb')
         cookies = pickle.load(account)
         print('logged in using cookies, welcome back!')
         for cookie in cookies:
             driver.add_cookie(cookie)
         time.sleep(3)
+        account.close()
     except Exception:
-        login_type(driver)
+        login_type(driver, acc)
 
-def login_type(driver):
+def login_type(driver, acc):
     #LOGIN
     email = input('this is only needed for the first time\n what is your email?\n')
     password = input('what is your password?\n')
@@ -128,7 +129,9 @@ def login_type(driver):
     login.click()
     time.sleep(6)
     #save_cookies
+    account = open(acc, 'rb')
     pickle.dump(driver.get_cookies(), account)
+    account.close()
 
 def posttxt(txt, driver):
     #POST TEXT
@@ -168,7 +171,7 @@ def post_pic(title, driver):
     post.click()
     #UPLOAD DONE
 
-def memebot(driver, sauce, delay = random.randint(1800, 5000)):
+def memebot(driver, sauce, acc, delay = random.randint(1800, 5000)):
     wait(delay)
     driver = webdriver.Chrome(PATH, chrome_options=options)
     caption = get_meme(sauce, driver)
@@ -177,30 +180,30 @@ def memebot(driver, sauce, delay = random.randint(1800, 5000)):
         print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
-        login_cookies(driver)
+        login_cookies(driver, acc)
         posttxt(caption, driver)
         driver.quit()
     else:
-        login_cookies(driver)
+        login_cookies(driver, acc)
         post_pic(caption, driver)
         driver.quit()
 
-def memeit(driver = driver):
+def memeit(acc, driver = driver):
 
     while True:
         try:
             try:
                 ran = random.randint(1,30)
                 sauce = src(ran)
-                memebot(driver, sauce)
+                memebot(driver, sauce, acc)
             except Exception:
                 ran = random.randint(1,30)
                 sauce = src(ran)
-                memebot(driver, sauce, 0)
+                memebot(driver, sauce, acc, 0)
         except:
             continue
 
-def mock(source):
+def mock(source, acc):
     sent = ''
     received = 'bot is in'
     def send(driver, received):
@@ -219,7 +222,7 @@ def mock(source):
         return received
 
     driver = webdriver.Chrome(PATH, chrome_options=options)
-    login_cookies(driver)
+    login_cookies(driver, acc)
     while True:
         test = ''
         received = receive(driver, sent)
@@ -238,13 +241,12 @@ def mock(source):
         sent = send(driver, received)
         time.sleep(2)
 
-
 choice = input('what do you want to do? press 1 for memes, anything else for mocking\n\n')
 
 if choice == '1':
     print("stop this program if the XPATH isn't hard coded, I'll try to fix that issue soon")
-    memeit()
+    memeit(acc)
 else:
     source = input('paste the messages adress in here using mbasic facebook version.\n')
     print('use "bela3" to make the bot stop')
-    mock(source)
+    mock(source, acc)
