@@ -11,12 +11,12 @@ if newpath != '1':
     PATH = newpath
 else:
     print('hi, all good')
+acc = input('choose a username\n') + '.pkl'
 
 
 driver = webdriver.Chrome(PATH, chrome_options=options)
 driver.close()
 driver.quit()
-acc = input('choose a username\n') + '.pkl'
 
 def src(source):
     #CHOOSE SOURCE
@@ -142,7 +142,7 @@ def posttxt(txt, driver):
     time.sleep(5)
     post = driver.find_element_by_xpath('./html/body/div[1]/div/div[1]/div[1]/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div/div/div/div')
     for word in txt:
-        time.sleep(random.randint(1,6))
+        time.sleep(random.randint(230,1042)/1000)
         post.send_keys(word)
     time.sleep(1)
     btn = driver.find_element_by_xpath('./html/body/div[1]/div/div[1]/div/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[3]/div[2]/div')
