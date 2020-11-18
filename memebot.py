@@ -225,21 +225,24 @@ def mock(source, acc):
     login_cookies(driver, acc)
     while True:
         test = ''
-        received = receive(driver, sent)
-        if 'bela3' in received:
-            break
-        else :
-            for i in range(len(received)):
-                if i % 2 == 0:
-                    test += received[i].lower()
-                else :
-                    test += received[i].upper()
-            if test in received:
-                continue
-            else:
-                received = test
-        sent = send(driver, received)
-        time.sleep(2)
+        try:
+            received = receive(driver, sent)
+            if 'bela3' in received:
+                break
+            else :
+                for i in range(len(received)):
+                    if i % 2 == 0:
+                        test += received[i].lower()
+                    else :
+                        test += received[i].upper()
+                if test in received:
+                    continue
+                else:
+                    received = test
+            sent = send(driver, received)
+            time.sleep(10)
+        except Exception:
+            continue
 
 choice = input('what do you want to do? press 1 for memes, anything else for mocking\n\n')
 
