@@ -165,7 +165,7 @@ def post_pic(title, driver):
     text = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
     cap = title
     for letter in str(cap):
-        time.sleep(random.randint(1,6))
+        time.sleep(random.randint(230,1042)/1000)
         text.send_keys(letter)
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[19]')
     post.click()
