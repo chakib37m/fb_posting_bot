@@ -2,7 +2,7 @@ import selenium, time, pickle, random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 options=Options()
-options.headless = True
+options.headless = False
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 PATH = "/home/chakib37/bot/chromedriver"
@@ -120,16 +120,17 @@ def login_type(driver, acc):
     #LOGIN
     email = input('this is only needed for the first time\n what is your email?\n')
     password = input('what is your password?\n')
-    driver.get('https://facebook.com')
-    email = driver.find_element_by_xpath('.//*[@id="email"]')
-    passwd = driver.find_element_by_xpath('.//*[@id="pass"]')
-    login = driver.find_element_by_xpath('.//*[@id="u_0_b"]')
-    email.send_keys(email)
+    driver.get('https://www.facebook.com')
+    time.sleep(5)
+    emailat = driver.find_element_by_id("email")
+    passwd = driver.find_element_by_id("pass")
+    login = driver.find_element_by_id("u_0_b")
+    emailat.send_keys(email)
     passwd.send_keys(password)
     login.click()
     time.sleep(6)
     #save_cookies
-    account = open(acc, 'rb')
+    account = open(acc, 'wb')
     pickle.dump(driver.get_cookies(), account)
     account.close()
 
