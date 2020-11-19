@@ -259,7 +259,7 @@ def mock(source, acc, mes, sent = ''):
         try:
             received = receive(driver, sent)
             if 'bela3' in received:
-                break
+                mes = '1'
             elif 'search' in received:
                 search(received)
                 send_pic(source, acc)
