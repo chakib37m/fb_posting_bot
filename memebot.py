@@ -2,7 +2,7 @@ import selenium, time, pickle, random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 options=Options()
-options.headless = False
+options.headless = True
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 PATH = "/home/chakib37/bot/chromedriver"
@@ -12,6 +12,8 @@ if newpath != '1':
 else:
     print('hi, all good')
 acc = input('choose a username\n') + '.pkl'
+
+received = 'bot is in'
 
 
 driver = webdriver.Chrome(PATH, chrome_options=options)
@@ -204,24 +206,52 @@ def memeit(acc, driver = driver):
         except:
             continue
 
-def mock(source, acc):
-    sent = ''
-    received = 'bot is in'
-    def send(driver, received):
-        if sent == received:
-            received = receive(driver, sent)
-        else:
-            driver.get(source)
-            field = driver.find_element_by_id("composerInput")
-            field.send_keys(received)
-            driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/table/tbody/tr/td[2]/input').click()
-            return sent
 
-    def receive(driver, sent):
+def send(driver, received, sent):
+    if sent == received:
+        received = receive(driver, sent)
+    else:
         driver.get(source)
-        received = driver.find_element_by_css_selector('#fua > div:nth-child(1) > div:nth-child(3) > span:nth-child(1)').text
-        return received
+        field = driver.find_element_by_id("composerInput")
+        field.send_keys(received)
+        driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/table/tbody/tr/td[2]/input').click()
+        return sent
 
+def receive(driver, sent):
+    driver.get(source)
+    received = driver.find_element_by_css_selector('#fua > div:nth-child(1) > div:nth-child(3) > span:nth-child(1)').text
+    return received
+
+def search(command, driver = driver):
+    try:
+        driver = webdriver.Chrome(PATH, chrome_options=options)
+        driver.get('https://www.google.dz/imghp?hl=fr&tab=wi&ogbl')
+        command = command[6::]
+        driver.find_element_by_xpath('./html/body/div[2]/div[2]/div[2]/form/div[2]/div[1]/div[1]/div/div[2]/input').send_keys(command)
+        driver.find_element_by_xpath('./html/body/div[2]/div[2]/div[2]/form/div[2]/div[1]/div[1]/button').click()
+        time.sleep(3)
+        driver.find_element_by_xpath('./html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/div[1]/a[1]/div[1]/img').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('./html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div[1]/div[1]/div/div[2]/a/img').screenshot('memes.png')
+    except Exception:
+        print('error')
+    finally:
+        driver.close()
+        driver.quit()
+
+def send_pic(source, acc, driver = driver):
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    login_cookies(driver, acc)
+    driver.get(source)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/span/input[2]').click()
+    time.sleep(1)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/section/form/div[1]/input[1]').send_keys('/home/chakib37/fb_posting_bot/memes.png')
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/section/form/div[2]/input').click()
+    time.sleep(5)
+    driver.quit()
+
+
+def mock(source, acc, mes, sent = ''):
     driver = webdriver.Chrome(PATH, chrome_options=options)
     login_cookies(driver, acc)
     while True:
@@ -230,6 +260,14 @@ def mock(source, acc):
             received = receive(driver, sent)
             if 'bela3' in received:
                 break
+            elif 'search' in received:
+                search(received)
+                send_pic(source, acc)
+                sent = 'pic'
+                time.sleep(10)
+                received = 'trying to get pic'
+            elif mes == '1':
+                continue
             else :
                 for i in range(len(received)):
                     if i % 2 == 0:
@@ -240,17 +278,18 @@ def mock(source, acc):
                     continue
                 else:
                     received = test
-            sent = send(driver, received)
-            time.sleep(10)
+                sent = send(driver, received, sent)
+                time.sleep(10)
         except Exception:
             continue
 
-choice = input('what do you want to do? press 1 for memes, anything else for mocking\n\n')
+choice = input('what do you want to do? press 1 for memes, anything else for mocking or messenger search help\n\n')
 
 if choice == '1':
     print("stop this program if the XPATH isn't hard coded, I'll try to fix that issue soon")
     memeit(acc)
 else:
+    mes=input('press 1 for messenger feature without mocking   b')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
     print('use "bela3" to make the bot stop')
-    mock(source, acc)
+    mock(source, acc, mes)
