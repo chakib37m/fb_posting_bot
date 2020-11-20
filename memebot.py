@@ -20,49 +20,15 @@ driver = webdriver.Chrome(PATH, chrome_options=options)
 driver.close()
 driver.quit()
 
-def src(source):
-    #CHOOSE SOURCE
-    if source == 20:
-        src = 'https://www.reddit.com/r/aww/rising/'
-    elif source == 27:
-        src = 'https://www.reddit.com/r/im14andthisisdeep/rising'
-    elif source == 26:
-        src = 'https://www.reddit.com/r/MapPorn/rising'
-    elif source == 25:
-        src = 'https://www.reddit.com/r/Algeria/new'
-    elif source == 24:
-        src = 'https://www.reddit.com/r/c137/rising'
-    elif source == 23:
-        src = 'https://www.reddit.com/r/BoJackHorseman/new/'
-    elif source == 22:
-        src = 'https://www.reddit.com/foodporn/rising'
-    elif source == 21:
-        src = 'https://www.reddit.com/r/oldpeoplefacebook/new/'
-    elif source == 12:
-        src = 'https://www.reddit.com/r/iamverybadass/rising/'
-    elif source == 18:
-        src = 'https://www.reddit.com/r/okbuddylinux/rising'
-    elif source == 13:
-        src = 'https://www.reddit.com/r/spaceporn/new/'
-    elif source == 17:
-        src = 'https://www.reddit.com/r/earthporn/new/'
-    elif source == 15:
-        src = 'https://www.reddit.com/r/holup/new/'
-    elif source == 16:
-        src = 'https://www.reddit.com/r/askreddit/new/'
-    elif source % 2 == 0:
-        src = 'https://www.reddit.com/r/memes/new/'
-    elif source % 7 == 0:
-        src = 'https://www.reddit.com/r/askscience/new/'
-    elif source % 3 == 0:
-        src = 'https://www.reddit.com/r/technicallythetruth/new/'
-    elif source == 1:
-        src = 'https://www.reddit.com/r/cursedcomments/new/'
-    elif source == 11:
-        src = 'https://www.reddit.com/r/linuxmemes/new/'
+def src():
+    src=open('source', 'r').read().splitlines()
+    rand = random.randint(0, len(src))
+    src = 'https://www.reddit.com/' + src[rand]
+    nr = random.randint(0, 4)
+    if nr == 3:
+        src += '/rising'
     else :
-        src = 'https://www.reddit.com/r/amongus/new/' 
-    
+        src+= '/new'
     print(src)
     return src
 
@@ -196,12 +162,10 @@ def memeit(acc, driver = driver):
     while True:
         try:
             try:
-                ran = random.randint(1,30)
-                sauce = src(ran)
+                sauce = src()
                 memebot(driver, sauce, acc)
             except Exception:
-                ran = random.randint(1,30)
-                sauce = src(ran)
+                sauce = src()
                 memebot(driver, sauce, acc, 0)
         except:
             continue
@@ -266,6 +230,18 @@ def mock(source, acc, mes, sent = ''):
                 sent = 'pic'
                 time.sleep(10)
                 received = 'trying to get pic'
+            elif 'memebot' in received:
+                sauce = src()
+                caption = get_meme(sauce, driver)
+                if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
+                    print('none')
+                elif caption.find('     \n') != -1:
+                    sent = send(driver, caption, sent)
+                    time.sleep(10)
+                else:
+                    send_pic(source, acc)
+                    sent = 'pic'
+                    time.sleep(10)
             elif mes == '1':
                 continue
             else :
@@ -289,7 +265,7 @@ if choice == '1':
     print("stop this program if the XPATH isn't hard coded, I'll try to fix that issue soon")
     memeit(acc)
 else:
-    mes=input('press 1 for messenger feature without mocking   b')
+    mes=input('press 1 for messenger feature without mocking   ')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
     print('use "bela3" to make the bot stop')
     mock(source, acc, mes)
