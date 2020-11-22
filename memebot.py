@@ -12,7 +12,6 @@ if newpath != '1':
 else:
     print('hi, all good')
 acc = input('choose a username\n') + '.pkl'
-
 received = 'bot is in'
 
 
@@ -140,12 +139,12 @@ def post_pic(title, driver):
     post.click()
     #UPLOAD DONE
 
-def memebot(driver, sauce, acc, delay = random.randint(1800, 5000)):
+def memebot(driver, sauce, acc, delay):
     wait(delay)
     driver = webdriver.Chrome(PATH, chrome_options=options)
     caption = get_meme(sauce, driver)
     time.sleep(2)
-    if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
+    if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
         print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
@@ -157,13 +156,13 @@ def memebot(driver, sauce, acc, delay = random.randint(1800, 5000)):
         post_pic(caption, driver)
         driver.quit()
 
-def memeit(acc, driver = driver):
+def memeit(acc, x, y, driver = driver):
 
     while True:
         try:
             try:
                 sauce = src()
-                memebot(driver, sauce, acc)
+                memebot(driver, sauce, acc, random.randint(x, y))
             except Exception:
                 sauce = src()
                 memebot(driver, sauce, acc, 0)
@@ -263,7 +262,9 @@ choice = input('what do you want to do? press 1 for memes, anything else for moc
 
 if choice == '1':
     print("stop this program if the XPATH isn't hard coded, I'll try to fix that issue soon")
-    memeit(acc)
+    x= int(input('what is the minimum time you want between posts?\n'))
+    y = int(input('what is the maximum time you want between posts?\n'))
+    memeit(acc, x, y)
 else:
     mes=input('press 1 for messenger feature without mocking   ')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
