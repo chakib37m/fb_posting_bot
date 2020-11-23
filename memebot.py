@@ -167,6 +167,7 @@ def memeit(acc, x, y, driver = driver):
                 sauce = src()
                 memebot(driver, sauce, acc, 0)
         except:
+            driver.quit()
             continue
 
 
