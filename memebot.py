@@ -14,6 +14,8 @@ else:
 acc = input('choose a username\n') + '.pkl'
 received = 'bot is in'
 
+if 'yes' in input('type "yes" if you want to see the bot working :     ').lower():
+    options.headless = False
 
 driver = webdriver.Chrome(PATH, chrome_options=options)
 driver.close()
@@ -103,17 +105,14 @@ def login_type(driver, acc):
 
 def posttxt(txt, driver):
     #POST TEXT
-    driver.get('https://facebook.com')
+    driver.get('https://mbasic.facebook.com')
     time.sleep(2)
-    post = driver.find_element_by_css_selector('div.a5q79mjw:nth-child(1) > span:nth-child(1)')
-    post.click()
-    time.sleep(5)
-    post = driver.find_element_by_xpath('./html/body/div[1]/div/div[1]/div[1]/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div/div/div/div')
+    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/table/tbody/tr/td[2]/div/textarea')
     for word in txt:
         time.sleep(random.randint(230,1042)/1000)
         post.send_keys(word)
     time.sleep(1)
-    btn = driver.find_element_by_xpath('./html/body/div[1]/div/div[1]/div/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[3]/div[2]/div')
+    btn = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/table/tbody/tr/td[3]/div/input')
     btn.click()
 
 def post_pic(title, driver):
@@ -269,5 +268,5 @@ if choice == '1':
 else:
     mes=input('press 1 for messenger feature without mocking   ')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
-    print('use "bela3" to make the bot stop')
+    print('use "bela3" to make the bot stop mocking, "seach" to make it send the first google images result, and "memebot" to make it send something from the subreddits in source')
     mock(source, acc, mes)
