@@ -1,6 +1,6 @@
 # fb_posting_bot
 
-YOU'LL NEED TO DOWNLOAD CHROME DRIVER BECAUSE IT USES SELENIUM
+YOU'LL NEED TO DOWNLOAD CHROME DRIVER BECAUSE IT USES SELENIUM.
 https://chromedriver.chromium.org/downloads
 
 
@@ -12,17 +12,14 @@ it now also mocks people in messenger,unless stopped using the command 'bela3'.
 
 it can now search the web with the command 'search' and send the first image from google.
 
-it can now send a meme from reddit in messener using the command 'memebot'.
+it can now send a meme from the subreddits in messener using the command 'memebot'.
 
 
-this might be useful if you want to keep a page working or a keep a group from dying or something, I don't know.
+this might be useful if you want to keep a page working or a keep a group from dying or something, I don't know (I'll try to add pages on groups though, else, it'll be easy to recode small things maybe).
 or piss off people because why not.
-or just keep it for search and memes in a groupchat.
+or just keep it for search or send memes in a groupchat.
 
 for now, this project can not deal with videos/gifs, only pictures and text or both.
 
-the facebook xpath to post seems dependant on the account, if you wanted to use it you'll need to inspect element on the create a post button, input field, and the post button (in normal facebook version, I didn't try another account with the mbasic version yet), however the messages things work fine.
-
-you'd want to use the login_type function at the first time, then you can let it just login with cookies everytime using your username.
-
+it will ask for your email and password only for the first time you use it, then generate a file to login by cookies (as it didn't even close the browser).
 I'll try to get it to do more though.
