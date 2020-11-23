@@ -261,9 +261,8 @@ def mock(source, acc, mes, sent = ''):
 choice = input('what do you want to do? press 1 for memes, anything else for mocking or messenger search help\n\n')
 
 if choice == '1':
-    print("stop this program if the XPATH isn't hard coded, I'll try to fix that issue soon")
-    x= int(input('what is the minimum time you want between posts?\n'))
-    y = int(input('what is the maximum time you want between posts?\n'))
+    x = int(input('what is the minimum time you want between posts in seconds?\n'))
+    y = int(input('what is the maximum time you want between posts in seconds?\n'))
     memeit(acc, x, y)
 else:
     mes=input('press 1 for messenger feature without mocking   ')
