@@ -178,6 +178,7 @@ def send(driver, received, sent):
         field = driver.find_element_by_id("composerInput")
         field.send_keys(received)
         driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/table/tbody/tr/td[2]/input').click()
+        sent = received
         return sent
 
 def receive(driver, sent):
@@ -221,7 +222,9 @@ def mock(source, acc, mes, sent = ''):
         test = ''
         try:
             received = receive(driver, sent)
-            if 'bela3' in received:
+            if sent == received:
+                continue
+            elif 'bela3' in received:
                 mes = '1'
             elif 'search' in received:
                 search(received)
@@ -241,6 +244,14 @@ def mock(source, acc, mes, sent = ''):
                     send_pic(source, acc)
                     sent = 'pic'
                     time.sleep(10)
+            elif ' is ' in received:
+                diff = received.find(' is ')
+                wo = received[diff + 4::].lower()
+                rd = received[:diff:].lower()
+                received = wo + ' is ' + rd
+                sent = send(driver, received, sent)
+                sent = received
+                time.sleep(5)
             elif mes == '1':
                 continue
             else :
