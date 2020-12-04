@@ -5,17 +5,15 @@ options=Options()
 options.headless = True
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
-PATH = "/home/chakib37/bot/chromedriver"
-newpath = input("where is your chrome driver located? press 1 if it's hard coded:    ")
-if newpath != '1':
-    PATH = newpath
-else:
-    print('hi, all good')
+try:
+    PATH = open('path', 'r').read()
+except Exception:
+    PATH = input("where is your chrome driver located :    ")
+    open('path', 'w').write(PATH)
+
 acc = input('choose a username\n') + '.pkl'
 received = 'bot is in'
 
-if 'yes' in input('type "yes" if you want to see the bot working :     ').lower():
-    options.headless = False
 
 driver = webdriver.Chrome(PATH, chrome_options=options)
 driver.close()
@@ -221,6 +219,7 @@ def mock(source, acc, mes, sent = ''):
     while True:
         test = ''
         try:
+            time.sleep(random.randint(3,9))
             received = receive(driver, sent)
             if sent == received:
                 continue
@@ -245,6 +244,7 @@ def mock(source, acc, mes, sent = ''):
                     sent = 'pic'
                     time.sleep(10)
             elif ' is ' in received:
+                received = received.lower()
                 diff = received.find(' is ')
                 wo = received[diff + 4::].lower()
                 rd = received[:diff:].lower()
@@ -252,6 +252,11 @@ def mock(source, acc, mes, sent = ''):
                 sent = send(driver, received, sent)
                 sent = received
                 time.sleep(5)
+            elif 'high five' in received.lower():
+                sent = send(driver, 'HIGH FIVE BUDDY', sent)
+            elif 'say ' in received.lower():
+                received = received[3::]
+                sent = send(driver, received, sent)
             elif mes == '1':
                 continue
             else :
