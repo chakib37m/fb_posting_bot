@@ -64,3 +64,5 @@ def pic(source = source):
 
 login()
 pic()
+driver.close()
+driver.quit()
