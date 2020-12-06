@@ -6,10 +6,18 @@ options.headless = True
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 try:
-    PATH = open('path', 'r').read()
+    paths = open('path', 'r').read().splitlines()
+    PATH = paths[0]
+    memes = paths[1]
 except Exception:
     PATH = input("where is your chrome driver located :    ")
-    open('path', 'w').write(PATH)
+    memes = input('where is this bot located? it should be something like .../fb_posting_bot :   ')
+    if memes [len(memes) - 1] == '/':
+        memes = memes + 'memes.png'
+    else:
+        memes = memes + '/memes.png'
+    paths = open('path', 'w').write(PATH + '\n' + memes)
+
 
 acc = input('choose a username\n') + '.pkl'
 received = 'bot is in'
@@ -18,6 +26,50 @@ received = 'bot is in'
 driver = webdriver.Chrome(PATH, chrome_options=options)
 driver.close()
 driver.quit()
+
+def grptxt(txt, grp, driver):
+    driver.get(grp)
+    time.sleep(2)
+    post = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    for i in txt:
+        post.send_keys(i)
+        time.sleep(random.randint(230,1042)/1000)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/table/tbody/tr/td[3]/div/input').click()
+
+def grppic(title, grp, driver):
+    driver.get(grp)
+    time.sleep(2)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/div/span/div[1]/table/tbody/tr/td[2]/input').click()
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]').send_keys(memes)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
+    cap = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    for i in title:
+        cap.send_keys(i)
+        time.sleep(random.randint(230,1042)/1000)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[18]').click()
+
+def pagetxt(txt, page, driver):
+    driver.get(page)
+    time.sleep(2)
+    post = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    for i in txt:
+        post.send_keys(i)
+        time.sleep(random.randint(230,1042)/1000)
+    btn = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div/div[3]/div/div[4]/form/table/tbody/tr/td[3]/div/input')
+    btn.click()
+
+def pagepic(txt, page, driver):
+    driver.get(page)
+    photo = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div/div[3]/div/div[4]/form/div/span/div[1]/table/tbody/tr/td[2]/input')
+    photo.click()
+    photo = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
+    photo.send_keys(memes)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
+    post = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    for i in txt:
+        post.send_keys(i)
+        time.sleep(random.randint(230,1042)/1000)
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[20]').click()
 
 def src():
     src=open('source', 'r').read().splitlines()
@@ -121,7 +173,7 @@ def post_pic(title, driver):
     time.sleep(2)
 
     memes = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
-    memes.send_keys('/home/chakib37/fb_posting_bot/memes.png')
+    memes.send_keys(memes)
 
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]')
     post.click()
@@ -167,7 +219,6 @@ def memeit(acc, x, y, driver = driver):
             driver.quit()
             continue
 
-
 def send(driver, received, sent):
     if sent == received:
         received = receive(driver, sent)
@@ -207,11 +258,48 @@ def send_pic(source, acc, driver = driver):
     driver.get(source)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/span/input[2]').click()
     time.sleep(1)
-    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/section/form/div[1]/input[1]').send_keys('/home/chakib37/fb_posting_bot/memes.png')
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/section/form/div[1]/input[1]').send_keys(memes)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/section/form/div[2]/input').click()
     time.sleep(5)
     driver.quit()
 
+def groupmeme(link, acc, x, y, driver = driver):
+    delay = random.randint(x, y)
+    sauce = src()
+    wait(delay)
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    caption = get_meme(sauce, driver)
+    time.sleep(2)
+    if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
+        print('none')
+        driver.quit()
+    elif caption.find('     \n') != -1:
+        login_cookies(driver, acc)
+        grptxt(caption, link, driver)
+        driver.quit()
+    else:
+        login_cookies(driver, acc)
+        grppic(caption, link, driver)
+        driver.quit()
+
+def pagememe(link, acc, x, y, driver = driver):
+    sauce = src()
+    delay = random.randint(x, y)
+    wait(delay)
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    caption = get_meme(sauce, driver)
+    time.sleep(2)
+    if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
+        print('none')
+        driver.quit()
+    elif caption.find('     \n') != -1:
+        login_cookies(driver, acc)
+        pagetxt(caption, link, driver)
+        driver.quit()
+    else:
+        login_cookies(driver, acc)
+        pagepic(caption, link, driver)
+        driver.quit()
 
 def mock(source, acc, mes, sent = ''):
     driver = webdriver.Chrome(PATH, chrome_options=options)
@@ -274,12 +362,37 @@ def mock(source, acc, mes, sent = ''):
         except Exception:
             continue
 
+def grp(link, acc, x, y):
+    while True:
+        try:
+            groupmeme(link, acc, x, y)
+        except Exception:
+            driver.quit()
+            continue
+
+def page(link, acc, x, y):
+    while True:
+        try:
+            pagememe(link, acc, x, y)
+        except Exception:
+            driver.quit()
+            continue
+
+
+
+
 choice = input('what do you want to do? press 1 for memes, anything else for mocking or messenger search help\n\n')
 
 if choice == '1':
+    choice = input('press 1 for profile posting, 2 for groups, anythong else for pages')
     x = int(input('what is the minimum time you want between posts in seconds?\n'))
     y = int(input('what is the maximum time you want between posts in seconds?\n'))
-    memeit(acc, x, y)
+    if choice == '1':
+        memeit(acc, x, y)
+    elif choice == '2':
+        grp(input('paste yout group link from "mbasic.facebook.com", if using m.facebook.com, just add the "basic" in there.   '), acc, x, y)
+    else:
+        page(input('paste the page link from "mbasic.facebook.com" please.   '), acc, x, y)
 else:
     mes=input('press 1 for messenger feature without mocking   ')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
