@@ -103,12 +103,15 @@ def get_meme(src, driver):
         time.sleep(10)
         title = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[3]/div[1]/div/h1').text
         meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[4]/a/img')
-        meme.click()
-        time.sleep(10)
-        driver.switch_to_window(driver.window_handles[1])
-        time.sleep(10)
-        meme = driver.find_element_by_xpath('./html/body/img')
-        meme.screenshot('memes.png')
+        try:
+            meme.click()
+            time.sleep(10)
+            driver.switch_to_window(driver.window_handles[1])
+            time.sleep(10)
+            meme = driver.find_element_by_xpath('./html/body/img')
+            meme.screenshot('memes.png')
+        except Exception:
+            meme.screenshot('memes.png')
         return title
     except Exception:
         try :
@@ -122,6 +125,7 @@ def get_meme(src, driver):
             title = str(title) + '     \n' + str(meme)
             return title
         except Exception:
+            driver.quit()
             title = 'none'
 
 def login_cookies(driver, acc):
@@ -387,7 +391,7 @@ def page(link, acc, x, y):
 choice = input('what do you want to do? press 1 for memes, anything else for mocking or messenger search help\n\n')
 
 if choice == '1':
-    choice = input('press 1 for profile posting, 2 for groups, anythong else for pages')
+    choice = input('press 1 for profile posting, 2 for groups, anythong else for pages      ')
     x = int(input('what is the minimum time you want between posts in seconds?\n'))
     y = int(input('what is the maximum time you want between posts in seconds?\n'))
     if choice == '1':
