@@ -12,10 +12,13 @@ try:
 except Exception:
     PATH = input("where is your chrome driver located :    ")
     memes = input('where is this bot located? it should be something like .../fb_posting_bot :   ')
-    if memes [len(memes) - 1] == '/':
+    if memes [len(memes) - 1] == '/' or memes [len(memes) - 1] == '\\' :
         memes = memes + 'memes.png'
     else:
-        memes = memes + '/memes.png'
+        if '/' in memes:
+            memes = memes + '/memes.png'
+        else:
+            memes = memes + '\\memes.png'
     paths = open('path', 'w').write(PATH + '\n' + memes)
 
 
@@ -168,12 +171,12 @@ def posttxt(txt, driver):
 def post_pic(title, driver):
     #UPLOAD
     driver.get("https://mbasic.facebook.com/")
-    memes = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/div[2]/span/div[1]/table/tbody/tr/td[2]/input')
-    memes.click()
+    pic = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/div[2]/span/div[1]/table/tbody/tr/td[2]/input')
+    pic.click()
     time.sleep(2)
 
-    memes = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
-    memes.send_keys(memes)
+    pic = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
+    pic.send_keys(memes)
 
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]')
     post.click()
