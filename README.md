@@ -9,9 +9,12 @@ This is my first python project since I wanted to learn by making stuff so that 
 basically all this project does is take posts/memes from reddit and post them to facebook, you can edit the subreddits in the file called 'source'.
 you can see if any problems happened in your path in the path file.
 
+Update :
 it now also mocks people in messenger,unless stopped using the command 'bela3'.
 it can search the web with the command 'search' and send the first image from google.
 it can send a meme/text from the subreddits in messener using the command 'memebot'.
+Update :
+it gets quotes from quotes.net and posts them
 
 this might be useful if you want to keep a page working or a keep a group from dying or something, I don't know.
 or piss off people because why not.
