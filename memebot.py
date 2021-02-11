@@ -2,7 +2,7 @@ import selenium, time, pickle, random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 options=Options()
-options.headless = True
+options.headless = False
 prefs = {"profile.default_content.setting.values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 try:
@@ -19,6 +19,13 @@ except Exception:
             memes = memes + '/memes.png'
         else:
             memes = memes + '\\memes.png'
+    if PATH [len(PATH) - 1] == '/' or PATH [len(PATH) - 1] == '\\' :
+        PATH = PATH + 'chromedriver'
+    elif 'chromedriver' not in PATH:
+        if '/' in PATH:
+            PATH = PATH + '/chromedriver'
+        else:
+            PATH = PATH + '\\chromedriver'
     paths = open('path', 'w').write(PATH + '\n' + memes)
 
 
@@ -150,7 +157,7 @@ def login_type(driver, acc):
     time.sleep(5)
     emailat = driver.find_element_by_id("email")
     passwd = driver.find_element_by_id("pass")
-    login = driver.find_element_by_id("u_0_b")
+    login = driver.find_element_by_id("u_0_d")
     emailat.send_keys(email)
     passwd.send_keys(password)
     login.click()
@@ -385,21 +392,44 @@ def page(link, acc, x, y):
             driver.quit()
             continue
 
+def get_quote():
+    quotedriver = webdriver.Chrome(PATH, chrome_options=options)
+    number = str(random.randint(1, 82249))
+    number = 'https://www.quotes.net/quote/' + number
+    print(number)
+    quotedriver.get(number)
+    time.sleep(6)
+    quote = quotedriver.find_element_by_id('disp-quote-body').text
+    quotedriver.close()
+    quotedriver.quit()
+    return quote
+
+def quote(acc, x, y):
+    while True:
+        delay = random.randint(x, y)
+        wait(delay)
+        quote = get_quote()
+        driver = webdriver.Chrome(PATH, chrome_options=options)
+        login_cookies(driver, acc)
+        posttxt(quote, driver)
+        driver.quit()
+
+x = int(input('what is the minimum time you want between posts in seconds?\n'))
+y = int(input('what is the maximum time you want between posts in seconds?\n'))
 
 
-
-choice = input('what do you want to do? press 1 for memes, anything else for mocking or messenger search help\n\n')
+choice = input('what do you want to do? press 1 for memes, 2 for quotes, anything else for mocking or messenger search help\n\n')
 
 if choice == '1':
     choice = input('press 1 for profile posting, 2 for groups, anythong else for pages      ')
-    x = int(input('what is the minimum time you want between posts in seconds?\n'))
-    y = int(input('what is the maximum time you want between posts in seconds?\n'))
     if choice == '1':
         memeit(acc, x, y)
     elif choice == '2':
         grp(input('paste yout group link from "mbasic.facebook.com", if using m.facebook.com, just add the "basic" in there.   '), acc, x, y)
     else:
         page(input('paste the page link from "mbasic.facebook.com" please.   '), acc, x, y)
+elif choice == '2':
+    quote(acc, x, y)
 else:
     mes=input('press 1 for messenger feature without mocking   ')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
