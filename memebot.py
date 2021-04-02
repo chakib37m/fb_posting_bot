@@ -2,7 +2,7 @@ import selenium, time, pickle, random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 options=Options()
-options.headless = False
+options.headless = True
 prefs = {"profile.default_content_setting_values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 try:
