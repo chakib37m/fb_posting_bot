@@ -2,8 +2,8 @@ import selenium, time, pickle, random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 options=Options()
-options.headless = True
-prefs = {"profile.default_content.setting.values.notifications" : 2}
+options.headless = False
+prefs = {"profile.default_content_setting_values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 try:
     paths = open('path', 'r').read().splitlines()
@@ -40,7 +40,7 @@ driver.quit()
 def grptxt(txt, grp, driver):
     driver.get(grp)
     time.sleep(2)
-    post = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     for i in txt:
         post.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
@@ -52,7 +52,7 @@ def grppic(title, grp, driver):
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/div/span/div[1]/table/tbody/tr/td[2]/input').click()
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]').send_keys(memes)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
-    cap = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    cap = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     for i in title:
         cap.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
@@ -61,7 +61,7 @@ def grppic(title, grp, driver):
 def pagetxt(txt, page, driver):
     driver.get(page)
     time.sleep(2)
-    post = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     for i in txt:
         post.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
@@ -75,7 +75,7 @@ def pagepic(txt, page, driver):
     photo = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
     photo.send_keys(memes)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
-    post = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     for i in txt:
         post.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
@@ -109,7 +109,18 @@ def get_meme(src, driver):
         meme.click()
         time.sleep(10)
         title = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[3]/div[1]/div/h1').text
-        meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[4]/a/img')
+
+
+        try:
+            try:
+                meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[4]/div/a/img')
+            except Exception:
+                meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[5]/div/a/img')
+        except Exception:
+            meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[6]/div/a/img')
+
+
+
         try:
             meme.click()
             time.sleep(10)
@@ -153,11 +164,11 @@ def login_type(driver, acc):
     #LOGIN
     email = input('this is only needed for the first time\n what is your email?\n')
     password = input('what is your password?\n')
-    driver.get('https://www.facebook.com')
+    driver.get('https://mbasic.facebook.com/')
     time.sleep(5)
-    emailat = driver.find_element_by_id("email")
-    passwd = driver.find_element_by_id("pass")
-    login = driver.find_element_by_id("u_0_d")
+    emailat = driver.find_element_by_id("m_login_email")
+    passwd = driver.find_element_by_xpath("./html/body/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div[2]/form/ul/li[2]/section/input")
+    login = driver.find_element_by_xpath("./html/body/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div[2]/form/ul/li[3]/input")
     emailat.send_keys(email)
     passwd.send_keys(password)
     login.click()
@@ -193,7 +204,7 @@ def post_pic(title, driver):
     post.click()
     time.sleep(5)
 
-    text = driver.find_element_by_xpath('.//*[@id="u_0_0"]')
+    text = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     cap = title
     for letter in str(cap):
         time.sleep(random.randint(230,1042)/1000)
