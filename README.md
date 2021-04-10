@@ -15,6 +15,7 @@ it can search the web with the command 'search' and send the first image from go
 it can send a meme/text from the subreddits in messener using the command 'memebot'.
 Update :
 it gets quotes from quotes.net and posts them
+It now got a messaging bot that I took from here and automated : https://www.elbot.com
 
 this might be useful if you want to keep a page working or a keep a group from dying or something, I don't know.
 or piss off people because why not.
