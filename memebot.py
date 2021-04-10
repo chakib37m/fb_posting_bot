@@ -425,6 +425,38 @@ def quote(acc, x, y):
         posttxt(quote, driver)
         driver.quit()
 
+def get_chat(sent,  elbot):
+    time.sleep(2)
+    if sent in elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[3]/td[2]").text or elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[3]/td[2]").text in sent :
+        return sent
+    elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[4]/td[2]/input").send_keys(sent)
+    elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[5]/td[2]/input").click()
+    time.sleep(3)
+    received = elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[3]/td[2]").text
+    if "jabbermode" in received.lower():
+        received = received[12::]
+    return received
+    
+def chatbot(source, acc = acc):
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    login_cookies(driver, acc)
+    elbot = webdriver.Chrome(PATH, chrome_options=options)
+    elbot.get('http://elbot-e.artificial-solutions.com/cgi-bin/elbot.cgi')
+    sent = ""
+    while True:
+        #try:
+        time.sleep(random.randint(3,9))
+        received = receive(driver, sent)
+        if sent == received:
+            continue
+        else:
+            sent = get_chat(received, elbot)
+            send(driver, sent, received)
+        #except Exception:
+        #    continue
+
+
+
 x = int(input('what is the minimum time you want between posts in seconds?\n'))
 y = int(input('what is the maximum time you want between posts in seconds?\n'))
 
@@ -442,7 +474,9 @@ if choice == '1':
 elif choice == '2':
     quote(acc, x, y)
 else:
-    mes=input('press 1 for messenger feature without mocking   ')
+    mes=input('press 1 for messenger feature without mocking, 2 for a chatbot   ')
     source = input('paste the messages adress in here using mbasic facebook version.\n')
     print('use "bela3" to make the bot stop mocking, "seach" to make it send the first google images result, and "memebot" to make it send something from the subreddits in source')
-    mock(source, acc, mes)
+if mes == "2":
+    chatbot(source)
+mock(source, acc, mes)
