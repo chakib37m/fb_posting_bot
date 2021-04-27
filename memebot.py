@@ -40,7 +40,7 @@ driver.quit()
 def grptxt(txt, grp, driver):
     driver.get(grp)
     time.sleep(2)
-    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
+    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/table/tbody/tr/td[2]/div/textarea')
     for i in txt:
         post.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
@@ -52,11 +52,12 @@ def grppic(title, grp, driver):
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/div/span/div[1]/table/tbody/tr/td[2]/input').click()
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]').send_keys(memes)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
-    cap = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
+    time.sleep(3)
+    cap = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[1]/table/tbody/tr/td[2]/textarea')
     for i in title:
         cap.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
-    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[18]').click()
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[19]').click()
 
 def pagetxt(txt, page, driver):
     driver.get(page)
@@ -75,6 +76,7 @@ def pagepic(txt, page, driver):
     photo = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[1]/div/input[1]')
     photo.send_keys(memes)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
+    time.sleep(2)
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     for i in txt:
         post.send_keys(i)
