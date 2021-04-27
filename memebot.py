@@ -57,7 +57,7 @@ def grppic(title, grp, driver):
     for i in title:
         cap.send_keys(i)
         time.sleep(random.randint(230,1042)/1000)
-    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[19]').click()
+    driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[18]').click()
 
 def pagetxt(txt, page, driver):
     driver.get(page)
