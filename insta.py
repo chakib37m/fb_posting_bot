@@ -2,7 +2,7 @@ import random, pickle, selenium, time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 options = Options()
-options.headless = Trues
+options.headless = True
 acc = input('what is your username\n') + '.pkl'
 try:
     PATH = open('path').read()
