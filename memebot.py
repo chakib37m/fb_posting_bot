@@ -1,8 +1,10 @@
 import selenium, time, pickle, random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
+
 options=Options()
-options.headless = True
+options.headless = False
 prefs = {"profile.default_content_setting_values.notifications" : 2}
 options.add_experimental_option("prefs",prefs)
 try:
@@ -29,24 +31,24 @@ except Exception:
     paths = open('path', 'w').write(PATH + '\n' + memes)
 
 
-acc = input('choose a username\n') + '.pkl'
-received = 'bot is in'
 
 
-driver = webdriver.Chrome(PATH, chrome_options=options)
-driver.close()
-driver.quit()
-
-def grptxt(txt, grp, driver):
+def grptxt(driver, txt, grp):
+    '''
+    recives a driver as the browser used, a text to post, and a grouplink.
+    '''
     driver.get(grp)
     time.sleep(2)
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/table/tbody/tr/td[2]/div/textarea')
     for i in txt:
         post.send_keys(i)
-        time.sleep(random.randint(230,1042)/1000)
+        time.sleep(random.randint(23,142)/1000)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/table/tbody/tr/td[3]/div/input').click()
 
-def grppic(title, grp, driver):
+def grppic(driver, title, grp):
+    '''
+    recives a driver as the browser used, a title to post a picture, and a grouplink.
+    '''
     driver.get(grp)
     time.sleep(2)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[2]/form/div/span/div[1]/table/tbody/tr/td[2]/input').click()
@@ -56,20 +58,26 @@ def grppic(title, grp, driver):
     cap = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[1]/table/tbody/tr/td[2]/textarea')
     for i in title:
         cap.send_keys(i)
-        time.sleep(random.randint(230,1042)/1000)
+        time.sleep(random.randint(23,142)/1000)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[18]').click()
 
-def pagetxt(txt, page, driver):
+def pagetxt(driver, txt, page):
+    '''
+    recives a driver as the browser used, a text to post, and a page link.
+    '''
     driver.get(page)
     time.sleep(2)
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     for i in txt:
         post.send_keys(i)
-        time.sleep(random.randint(230,1042)/1000)
+        time.sleep(random.randint(23,142)/1000)
     btn = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div/div[3]/div/div[4]/form/table/tbody/tr/td[3]/div/input')
     btn.click()
 
-def pagepic(txt, page, driver):
+def pagepic(driver, txt, page):
+    '''
+    recives a driver as the browser used, a title to post a picture, and a page link.
+    '''
     driver.get(page)
     photo = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div/div[3]/div/div[4]/form/div/span/div[1]/table/tbody/tr/td[2]/input')
     photo.click()
@@ -77,13 +85,17 @@ def pagepic(txt, page, driver):
     photo.send_keys(memes)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/form/div[3]/input[1]').click()
     time.sleep(2)
-    post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
+    post = driver.find_element_by_xpath('.//*[@id="u_0_0_0/"]')
     for i in txt:
         post.send_keys(i)
-        time.sleep(random.randint(230,1042)/1000)
+        time.sleep(random.randint(23,142)/1000)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[20]').click()
 
 def src():
+    '''
+    opens a file called source that has a text of reddit's subreddits 'r/something',
+    generates a link to a random one and returns it
+    '''
     src=open('source', 'r').read().splitlines()
     rand = random.randint(0, len(src))
     src = 'https://www.reddit.com/' + src[rand]
@@ -92,27 +104,33 @@ def src():
         src += '/rising'
     else :
         src+= '/new'
+    if "Quebec" in src:
+        src = 'https://www.reddit.com/r/Quebec/new/?f=flair_name%3A%22Humour%22'
     print(src)
     return src
 
 def wait(delay):
+    '''
+    waits a delay while telling the remaining time every 10 minutes
+    '''
     print(delay)
     for i in range(0, delay):
         if (delay-i) % 600 == 0:
             print(str((delay-i)/60) + ' minutes left to post')
         time.sleep(1)
 
-def get_meme(src, driver):
+def get_meme(driver, src):
+    '''
+    Gets a meme from a reddit source using the driver and the source as arguments.
+    '''
     #STEAL MEMES
     try :
         driver.get(src)
         time.sleep(1)
         meme = driver.find_element_by_xpath('.//*[contains(@id,"t3_")]')
         meme.click()
-        time.sleep(10)
+        time.sleep(5)
         title = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[3]/div[1]/div/h1').text
-
-
         try:
             try:
                 meme = driver.find_element_by_xpath('./html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[4]/div/a/img')
@@ -149,6 +167,10 @@ def get_meme(src, driver):
             title = 'none'
 
 def login_cookies(driver, acc):
+    '''
+    Gets driver and a user/file name as arguments
+    Logs in Facebook with cookies.pkl that are saved in your computer's bot folder
+    '''
     driver.get('https://www.facebook.com')
     #LOGIN BY COOKIES
     try:
@@ -157,13 +179,17 @@ def login_cookies(driver, acc):
         print('logged in using cookies, welcome back!')
         for cookie in cookies:
             driver.add_cookie(cookie)
-        time.sleep(3)
+        time.sleep(1)
         account.close()
     except Exception:
         login_type(driver, acc)
 
 def login_type(driver, acc):
     #LOGIN
+    '''
+    Logs in to Facebook with your e-mail and password
+    receives a driver and a username as arguments to save the cookies.
+    '''
     email = input('this is only needed for the first time\n what is your email?\n')
     password = input('what is your password?\n')
     driver.get('https://mbasic.facebook.com/')
@@ -180,19 +206,25 @@ def login_type(driver, acc):
     pickle.dump(driver.get_cookies(), account)
     account.close()
 
-def posttxt(txt, driver):
+def posttxt(driver, txt):
+    '''
+    recives a driver as the browser used, a text to post in your profile.
+    '''
     #POST TEXT
     driver.get('https://mbasic.facebook.com')
     time.sleep(2)
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/table/tbody/tr/td[2]/div/textarea')
     for word in txt:
-        time.sleep(random.randint(230,1042)/1000)
+        time.sleep(random.randint(23,142)/1000)
         post.send_keys(word)
     time.sleep(1)
     btn = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/table/tbody/tr/td[3]/div/input')
     btn.click()
 
-def post_pic(title, driver):
+def post_pic(driver, title):
+    '''
+    recives a driver as the browser used, a title to post a picture in your profile.
+    '''
     #UPLOAD
     driver.get("https://mbasic.facebook.com/")
     pic = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[2]/div/form/div[2]/span/div[1]/table/tbody/tr/td[2]/input')
@@ -209,44 +241,55 @@ def post_pic(title, driver):
     text = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/div[2]/table/tbody/tr/td[2]/textarea')
     cap = title
     for letter in str(cap):
-        time.sleep(random.randint(230,1042)/1000)
+        time.sleep(random.randint(23,142)/1000)
         text.send_keys(letter)
     post = driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[19]')
     post.click()
     #UPLOAD DONE
 
-def memebot(driver, sauce, acc, delay):
-    wait(delay)
+def memebot(sauce, acc):
+    '''
+    Gets a reddit link for a source and the username for the Facebook cookies.
+    Gets a meme and posts it into the profile
+    '''
     driver = webdriver.Chrome(PATH, chrome_options=options)
-    caption = get_meme(sauce, driver)
+    caption = get_meme(driver, sauce)
     time.sleep(2)
     if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
         print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
         login_cookies(driver, acc)
-        posttxt(caption, driver)
+        posttxt(driver, caption)
         driver.quit()
     else:
         login_cookies(driver, acc)
-        post_pic(caption, driver)
+        post_pic(driver, caption)
         driver.quit()
 
-def memeit(acc, x, y, driver = driver):
-
+def memeit(acc, x, y):
+    '''
+    Receives a local username and the min and max time between posts,
+    Gets a meme and posts it into the profile,
+    Takes care of looping for the time and the driver and everything
+    '''
     while True:
+        wait(random.randint(x, y))
+        if random.randint(1, 10) == 5:
+            quote(acc)
         try:
-            try:
-                sauce = src()
-                memebot(driver, sauce, acc, random.randint(x, y))
-            except Exception:
-                sauce = src()
-                memebot(driver, sauce, acc, 0)
-        except:
-            driver.quit()
-            continue
+            sauce = src()
+            memebot(sauce, acc)
+        except Exception:
+            sauce = src()
+            memebot(sauce, acc)
 
 def send(driver, received, sent):
+    '''
+    Sends a message in facebook, gets a driver as an argument,
+    the last received message, and the last sent one,
+    returns the sent one to prevent looping with received and spamming
+    '''
     if sent == received:
         received = receive(driver, sent)
     else:
@@ -258,29 +301,19 @@ def send(driver, received, sent):
         return sent
 
 def receive(driver, sent):
+    '''
+    Works with send(driver, received, sent),
+    Takes the driver used and the last message sent and returns what's received 
+    '''
     driver.get(source)
     received = driver.find_element_by_css_selector('#fua > div:nth-child(1) > div:nth-child(3) > span:nth-child(1)').text
     return received
 
-def search(command, driver = driver):
-    try:
-        driver = webdriver.Chrome(PATH, chrome_options=options)
-        driver.get('https://www.google.dz/imghp?hl=fr&tab=wi&ogbl')
-        command = command[6::]
-        driver.find_element_by_xpath('./html/body/div[2]/div[2]/div[2]/form/div[2]/div[1]/div[1]/div/div[2]/input').send_keys(command)
-        driver.find_element_by_xpath('./html/body/div[2]/div[2]/div[2]/form/div[2]/div[1]/div[1]/button').click()
-        time.sleep(3)
-        driver.find_element_by_xpath('./html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/div[1]/a[1]/div[1]/img').click()
-        time.sleep(5)
-        driver.find_element_by_xpath('./html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div[1]/div[1]/div/div[2]/a/img').screenshot('memes.png')
-    except Exception:
-        print('error')
-    finally:
-        driver.close()
-        driver.quit()
-
-def send_pic(source, acc, driver = driver):
-    driver = webdriver.Chrome(PATH, chrome_options=options)
+def send_pic(driver, source, acc):
+    '''
+    Sends a picture into a messenger coverstation,
+    receives the driver used, the link of the converstation, and the username for the cookies.
+    '''
     login_cookies(driver, acc)
     driver.get(source)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/div[1]/div[3]/div/div/form/span/input[2]').click()
@@ -290,45 +323,55 @@ def send_pic(source, acc, driver = driver):
     time.sleep(5)
     driver.quit()
 
-def groupmeme(link, acc, x, y, driver = driver):
-    delay = random.randint(x, y)
+def groupmeme(link, acc):
+    '''
+    Gets a group link and the username for the Facebook cookies.
+    Gets a meme and posts it into the group
+    '''
     sauce = src()
-    wait(delay)
     driver = webdriver.Chrome(PATH, chrome_options=options)
-    caption = get_meme(sauce, driver)
+    caption = get_meme(driver, sauce)
     time.sleep(2)
     if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
         print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
         login_cookies(driver, acc)
-        grptxt(caption, link, driver)
+        grptxt(driver, caption, link)
         driver.quit()
     else:
         login_cookies(driver, acc)
-        grppic(caption, link, driver)
+        grppic(driver, caption, link)
         driver.quit()
 
-def pagememe(link, acc, x, y, driver = driver):
+def pagememe(link, acc):
+    '''
+    Gets a page link and the username for the Facebook cookies.
+    Gets a meme and posts it into the page
+    '''
     sauce = src()
-    delay = random.randint(x, y)
-    wait(delay)
     driver = webdriver.Chrome(PATH, chrome_options=options)
-    caption = get_meme(sauce, driver)
+    caption = get_meme(driver, sauce)
     time.sleep(2)
     if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
         print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
         login_cookies(driver, acc)
-        pagetxt(caption, link, driver)
+        pagetxt(driver, caption, link)
         driver.quit()
     else:
         login_cookies(driver, acc)
-        pagepic(caption, link, driver)
+        pagepic(driver, caption, link)
         driver.quit()
 
 def mock(source, acc, mes, sent = ''):
+    '''
+    Gets a converstation link, a username for the cookies,
+    mes which is '1' to prevent mocking or anything else
+    and the last message sent to prevent looping.
+
+    '''
     driver = webdriver.Chrome(PATH, chrome_options=options)
     login_cookies(driver, acc)
     while True:
@@ -348,14 +391,14 @@ def mock(source, acc, mes, sent = ''):
                 received = 'trying to get pic'
             elif 'memebot' in received:
                 sauce = src()
-                caption = get_meme(sauce, driver)
+                caption = get_meme(driver, sauce)
                 if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
                     print('none')
                 elif caption.find('     \n') != -1:
                     sent = send(driver, caption, sent)
                     time.sleep(10)
                 else:
-                    send_pic(source, acc)
+                    send_pic(driver,  source, acc)
                     sent = 'pic'
                     time.sleep(10)
             elif ' is ' in received:
@@ -390,22 +433,29 @@ def mock(source, acc, mes, sent = ''):
             continue
 
 def grp(link, acc, x, y):
+    '''
+    Gets a group link and the username for the Facebook cookies.
+    the minimum and maximum delay
+    Gets a meme and posts it into the group and loop that with the delay
+    '''
     while True:
-        try:
-            groupmeme(link, acc, x, y)
-        except Exception:
-            driver.quit()
-            continue
+        delay(random.randint(x, y))
+        groupmeme(link, acc)
 
 def page(link, acc, x, y):
+    '''
+    Gets a page link and the username for the Facebook cookies.
+    the minimum and maximum delay
+    Gets a meme and posts it into the page and loop that with the delay
+    '''
     while True:
-        try:
-            pagememe(link, acc, x, y)
-        except Exception:
-            driver.quit()
-            continue
-
+        random.randint(x, y)
+        pagememe(link, acc)
+        
 def get_quote():
+    '''
+    Takes care of everything, just returns a quote as a string of text
+    '''
     quotedriver = webdriver.Chrome(PATH, chrome_options=options)
     number = str(random.randint(1, 82249))
     number = 'https://www.quotes.net/quote/' + number
@@ -417,17 +467,22 @@ def get_quote():
     quotedriver.quit()
     return quote
 
-def quote(acc, x, y):
-    while True:
-        delay = random.randint(x, y)
-        wait(delay)
-        quote = get_quote()
-        driver = webdriver.Chrome(PATH, chrome_options=options)
-        login_cookies(driver, acc)
-        posttxt(quote, driver)
-        driver.quit()
+def quote(acc):
+    '''
+    Gets a username for the cookies and starts posting quotes
+    '''
+    quote = get_quote()
+    quote = 'Quote of the day :\n' + quote
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    login_cookies(driver, acc)
+    posttxt(driver, quote)
+    driver.quit()
 
-def get_chat(sent,  elbot):
+def get_chat(sent, elbot):
+    '''
+    Gets 'sent' as an argument of what to send to Elbot which is an online chat AI,
+    and a driver a second argument.
+    '''
     time.sleep(2)
     if sent in elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[3]/td[2]").text or elbot.find_element_by_xpath("/html/body/form/table/tbody/tr[3]/td[2]").text in sent :
         return sent
@@ -439,7 +494,11 @@ def get_chat(sent,  elbot):
         received = received[12::]
     return received
     
-def chatbot(source, acc = acc):
+def chatbot(source, acc):
+    '''
+    Gets a converstation link as a source and an username for the cookies,
+    uses Elbot's website for a chat with an AI
+    '''
     driver = webdriver.Chrome(PATH, chrome_options=options)
     login_cookies(driver, acc)
     elbot = webdriver.Chrome(PATH, chrome_options=options)
@@ -447,7 +506,7 @@ def chatbot(source, acc = acc):
     sent = ""
     while True:
         #try:
-        time.sleep(random.randint(3,9))
+        time.sleep(random.randint(3,7))
         received = receive(driver, sent)
         if sent == received:
             continue
@@ -459,26 +518,40 @@ def chatbot(source, acc = acc):
 
 
 
-x = int(input('what is the minimum time you want between posts in seconds?\n'))
-y = int(input('what is the maximum time you want between posts in seconds?\n'))
+def main():
+
+    acc = input('choose a username\n') + '.pkl'
+    received = 'bot is in'
 
 
-choice = input('what do you want to do? press 1 for memes, 2 for quotes, anything else for mocking or messenger search help\n\n')
+    driver = webdriver.Chrome(PATH, chrome_options=options)
+    driver.close()
+    driver.quit()
 
-if choice == '1':
-    choice = input('press 1 for profile posting, 2 for groups, anythong else for pages      ')
+
+    x = int(input('what is the minimum time you want between posts in seconds?\n'))
+    y = int(input('what is the maximum time you want between posts in seconds?\n'))
+
+    choice = input('what do you want to do? press 1 for memes and a quote per 10 memes, anything else for mocking or messenger search help\n\n')
+
     if choice == '1':
-        memeit(acc, x, y)
-    elif choice == '2':
-        grp(input('paste yout group link from "mbasic.facebook.com", if using m.facebook.com, just add the "basic" in there.   '), acc, x, y)
+        choice = input('press 1 for profile posting, 2 for groups, anythong else for pages      ')
+        if choice == '1':
+            memeit(acc, x, y)
+        elif choice == '2':
+            grp(input('paste yout group link from "mbasic.facebook.com", if using m.facebook.com, just add the "basic" in there.   '), acc, x, y)
+        else:
+            page(input('paste the page link from "mbasic.facebook.com" please.   '), acc, x, y)
     else:
-        page(input('paste the page link from "mbasic.facebook.com" please.   '), acc, x, y)
-elif choice == '2':
-    quote(acc, x, y)
-else:
-    mes=input('press 1 for messenger feature without mocking, 2 for a chatbot   ')
-    source = input('paste the messages adress in here using mbasic facebook version.\n')
-    print('use "bela3" to make the bot stop mocking, "seach" to make it send the first google images result, and "memebot" to make it send something from the subreddits in source')
-if mes == "2":
-    chatbot(source)
-mock(source, acc, mes)
+        mes=input('press 1 for messenger feature without mocking, 2 for a chatbot   ')
+        source = input('paste the messages adress in here using mbasic facebook version.\n')
+        print('use "bela3" to make the bot stop mocking, "seach" to make it send the first google images result, and "memebot" to make it send something from the subreddits in source')
+    if mes == "2":
+        chatbot(source, acc)
+    else :
+        mock(source, acc, mes)
+
+
+
+if __name__ == "__main__":
+    main()
