@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+<title>Sign Up</title>
+
+
+{% block head %}
+
+
+{% endblock %}
+
+{% block body %}
+
+<form action="/signup" method="post">
+    <input type="text" name="username" placeholder="Username">
+    <input type="text" name="email" placeholder="Facebook's Email">
+    <input type="password" name="password" placeholder="Password">
+    <input type="password" name="fbpassword" placeholder="Facebook's Password">
+    <button value="submit">Sign up</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+<title>Faceboook's posting bot</title>
+
+
+{% block head %}
+
+
+{% endblock %}
+
+{% block body %}
+{% if isin == 0 %}
+<button class="btn btn-primary"><a href="/signup">Sign up</a></button>
+{% else %}
+<form action="/post" method="post">
+    <div class="form-group">
+    Minimum time between posts :
+    <input class="form-control" type="text" name="min">
+    <br></div>
+    <div class="form-group">
+    Maximum time beteween posts :
+    <input class="form-control" type="text" name="max">
+    <br></div>
+    <div class="form-group">
+    sources (labeled as r/subreddit, use multiple sources seperated by a space)
+    You can also write "quote" for a random quote
+    <input class="form-control" type="text" name="sources">
+    <br></div>
+    <div class="form-group">
+    Link (write profile to post in profile, else the link to a page/group might be used as mbasic kind of links)
+    <input class="form-control" type="text" name="links">
+    <br></div>
+    <button class="btn btn-primary" value="submit">Start</button>
+</form>
+{% endif %}
+{% endblock %}

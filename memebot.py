@@ -91,12 +91,13 @@ def pagepic(driver, txt, page):
         time.sleep(random.randint(23,142)/1000)
     driver.find_element_by_xpath('./html/body/div/div/div[2]/div/table/tbody/tr/td/div/form/input[20]').click()
 
-def src():
+def src(name='0'):
     '''
     opens a file called source that has a text of reddit's subreddits 'r/something',
     generates a link to a random one and returns it
     '''
-    src=open('source', 'r').read().splitlines()
+    name = str(name)
+    src=open(str(name)).read().splitlines()
     rand = random.randint(0, len(src))
     src = 'https://www.reddit.com/' + src[rand]
     nr = random.randint(0, 4)
@@ -106,17 +107,13 @@ def src():
         src+= '/new'
     if "Quebec" in src:
         src = 'https://www.reddit.com/r/Quebec/new/?f=flair_name%3A%22Humour%22'
-    print(src)
     return src
 
 def wait(delay):
     '''
     waits a delay while telling the remaining time every 10 minutes
     '''
-    print(delay)
     for i in range(0, delay):
-        if (delay-i) % 600 == 0:
-            print(str((delay-i)/60) + ' minutes left to post')
         time.sleep(1)
 
 def get_meme(driver, src):
@@ -176,7 +173,6 @@ def login_cookies(driver, acc):
     try:
         account = open(acc, 'rb')
         cookies = pickle.load(account)
-        print('logged in using cookies, welcome back!')
         for cookie in cookies:
             driver.add_cookie(cookie)
         time.sleep(1)
@@ -184,14 +180,12 @@ def login_cookies(driver, acc):
     except Exception:
         login_type(driver, acc)
 
-def login_type(driver, acc):
+def login_type(driver, acc, email, password):
     #LOGIN
     '''
     Logs in to Facebook with your e-mail and password
     receives a driver and a username as arguments to save the cookies.
     '''
-    email = input('this is only needed for the first time\n what is your email?\n')
-    password = input('what is your password?\n')
     driver.get('https://mbasic.facebook.com/')
     time.sleep(5)
     emailat = driver.find_element_by_id("m_login_email")
@@ -256,7 +250,6 @@ def memebot(sauce, acc):
     caption = get_meme(driver, sauce)
     time.sleep(2)
     if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
-        print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
         login_cookies(driver, acc)
@@ -267,7 +260,7 @@ def memebot(sauce, acc):
         post_pic(driver, caption)
         driver.quit()
 
-def memeit(acc, x, y):
+def memeit(acc, x, y, id='0'):
     '''
     Receives a local username and the min and max time between posts,
     Gets a meme and posts it into the profile,
@@ -275,13 +268,11 @@ def memeit(acc, x, y):
     '''
     while True:
         wait(random.randint(x, y))
-        if random.randint(1, 10) == 5:
-            quote(acc)
         try:
-            sauce = src()
+            sauce = src(id)
             memebot(sauce, acc)
         except Exception:
-            sauce = src()
+            sauce = src(id)
             memebot(sauce, acc)
 
 def send(driver, received, sent):
@@ -328,12 +319,11 @@ def groupmeme(link, acc):
     Gets a group link and the username for the Facebook cookies.
     Gets a meme and posts it into the group
     '''
-    sauce = src()
+    sauce = src(id)
     driver = webdriver.Chrome(PATH, chrome_options=options)
     caption = get_meme(driver, sauce)
     time.sleep(2)
     if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
-        print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
         login_cookies(driver, acc)
@@ -349,12 +339,11 @@ def pagememe(link, acc):
     Gets a page link and the username for the Facebook cookies.
     Gets a meme and posts it into the page
     '''
-    sauce = src()
+    sauce = src(id)
     driver = webdriver.Chrome(PATH, chrome_options=options)
     caption = get_meme(driver, sauce)
     time.sleep(2)
     if caption == 'none' or caption.find('u/') != -1 or caption.find('r/') != -1:
-        print('none')
         driver.quit()
     elif caption.find('     \n') != -1:
         login_cookies(driver, acc)
@@ -390,11 +379,9 @@ def mock(source, acc, mes, sent = ''):
                 time.sleep(10)
                 received = 'trying to get pic'
             elif 'memebot' in received:
-                sauce = src()
+                sauce = src(id)
                 caption = get_meme(driver, sauce)
-                if caption == 'none' or caption.find('/u') != -1 or caption.find('/r') != -1:
-                    print('none')
-                elif caption.find('     \n') != -1:
+                if caption.find('     \n') != -1:
                     sent = send(driver, caption, sent)
                     time.sleep(10)
                 else:
@@ -432,7 +419,7 @@ def mock(source, acc, mes, sent = ''):
         except Exception:
             continue
 
-def grp(link, acc, x, y):
+def grp(link, acc, x, y, id='0'):
     '''
     Gets a group link and the username for the Facebook cookies.
     the minimum and maximum delay
@@ -442,7 +429,7 @@ def grp(link, acc, x, y):
         delay(random.randint(x, y))
         groupmeme(link, acc)
 
-def page(link, acc, x, y):
+def page(link, acc, x, y, id='0'):
     '''
     Gets a page link and the username for the Facebook cookies.
     the minimum and maximum delay
@@ -459,7 +446,6 @@ def get_quote():
     quotedriver = webdriver.Chrome(PATH, chrome_options=options)
     number = str(random.randint(1, 82249))
     number = 'https://www.quotes.net/quote/' + number
-    print(number)
     quotedriver.get(number)
     time.sleep(6)
     quote = quotedriver.find_element_by_id('disp-quote-body').text
@@ -467,10 +453,11 @@ def get_quote():
     quotedriver.quit()
     return quote
 
-def quote(acc):
+def quote(acc, x, y):
     '''
     Gets a username for the cookies and starts posting quotes
     '''
+    wait(random.randint(x, y))
     quote = get_quote()
     quote = 'Quote of the day :\n' + quote
     driver = webdriver.Chrome(PATH, chrome_options=options)
